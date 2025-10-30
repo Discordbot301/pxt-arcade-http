@@ -117,6 +117,30 @@ namespace http {
     }
 
     /**
+     * Simple HTTP GET that returns the response as a string (pauses until complete).
+     */
+    //% block="HTTP GET $url key $apiKey" weight=95
+    //% apiKey.defl=""
+    //% blockSetVariable=response
+    export function httpGet(url: string, apiKey: string): string {
+        let result = ""
+        let done = false
+        
+        getDataAsync(url, apiKey)
+            .then(r => {
+                result = r.data
+                done = true
+            })
+            .catch(_ => {
+                result = ""
+                done = true
+            })
+        
+        pauseUntil(() => done, 5000)
+        return result
+    }
+
+    /**
      * Get data from a database or API (with optional key).
      */
     //% block="get data from $url key $apiKey then do $handler" handlerStatement=1 weight=45
@@ -145,6 +169,29 @@ namespace http {
                 success: res.status >= 200 && res.status < 300,
                 data: body
             })))
+    }
+
+    /**
+     * Simple HTTP POST that sends data and returns true if successful.
+     */
+    //% block="HTTP POST $url value $data key $apiKey" weight=85
+    //% apiKey.defl=""
+    export function httpPost(url: string, data: string, apiKey: string): boolean {
+        let success = false
+        let done = false
+        
+        saveDataAsync(url, data, apiKey)
+            .then(r => {
+                success = r.success
+                done = true
+            })
+            .catch(_ => {
+                success = false
+                done = true
+            })
+        
+        pauseUntil(() => done, 5000)
+        return success
     }
 
     /**
