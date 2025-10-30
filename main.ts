@@ -117,11 +117,10 @@ namespace http {
     }
 
     /**
-     * Get data from a database/API with optional authentication key.
+     * Get data from a database or API (with optional key).
      */
-    //% block="get data from %url|with key %apiKey then do %handler" handlerStatement=1 weight=45
+    //% block="get data from $url key $apiKey then do $handler" handlerStatement=1 weight=45
     //% apiKey.defl=""
-    //% expandableArgumentMode="toggle"
     export function getData(url: string, apiKey: string, handler: (success: boolean, data: string) => void): void {
         getDataAsync(url, apiKey)
             .then(result => handler(result.success, result.data))
@@ -149,11 +148,10 @@ namespace http {
     }
 
     /**
-     * Set/save data to a database/API with optional authentication key.
+     * Save data to a database or API (with optional key).
      */
-    //% block="save data to %url|value %data|with key %apiKey then do %handler" handlerStatement=1 weight=40
+    //% block="save data to $url value $data key $apiKey then do $handler" handlerStatement=1 weight=40
     //% apiKey.defl=""
-    //% expandableArgumentMode="toggle"
     export function saveData(url: string, data: string, apiKey: string, handler: (success: boolean, response: string) => void): void {
         saveDataAsync(url, data, apiKey)
             .then(result => handler(result.success, result.response))
@@ -183,11 +181,10 @@ namespace http {
     }
 
     /**
-     * Get a specific variable/value from a database by key.
+     * Get a specific variable from a database.
      */
-    //% block="get variable %variableName from %url|with key %apiKey then do %handler" handlerStatement=1 weight=35
+    //% block="get variable $variableName from $url key $apiKey then do $handler" handlerStatement=1 weight=35
     //% apiKey.defl=""
-    //% expandableArgumentMode="toggle"
     export function getVariable(variableName: string, url: string, apiKey: string, handler: (success: boolean, value: string) => void): void {
         getVariableAsync(variableName, url, apiKey)
             .then(result => handler(result.success, result.value))
@@ -219,11 +216,10 @@ namespace http {
     }
 
     /**
-     * Set/save a specific variable to a database.
+     * Set a variable in a database.
      */
-    //% block="set variable %variableName to %value at %url|with key %apiKey then do %handler" handlerStatement=1 weight=30
+    //% block="set variable $variableName to $value at $url key $apiKey then do $handler" handlerStatement=1 weight=30
     //% apiKey.defl=""
-    //% expandableArgumentMode="toggle"
     export function setVariable(variableName: string, value: string, url: string, apiKey: string, handler: (success: boolean) => void): void {
         setVariableAsync(variableName, value, url, apiKey)
             .then(success => handler(success))
