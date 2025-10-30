@@ -1,0 +1,7 @@
+built/
+pxt_modules/
+node_modules/
+*.db
+*.tgz
+*.zip
+*.hex

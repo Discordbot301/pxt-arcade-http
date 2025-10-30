@@ -1,0 +1,17 @@
+{
+  "name": "arcade-http",
+  "version": "0.0.1",
+  "description": "HTTP GET and POST for MakeCode Arcade (simulator-supported)",
+  "license": "MIT",
+  "dependencies": {
+    "arcade": "*"
+  },
+  "supportedTargets": [
+    "arcade"
+  ],
+  "files": [
+    "main.ts",
+    "README.md"
+  ],
+  "testFiles": []
+}
