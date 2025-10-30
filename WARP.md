@@ -4,9 +4,11 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 ## Project Overview
 
-This is a **MakeCode Arcade extension** that provides HTTP GET and POST functionality for MakeCode Arcade projects. It's designed to work in the web simulator via the browser's `fetch` API.
+This is a **MakeCode Arcade extension** that provides HTTP GET and POST functionality for MakeCode Arcade projects, with built-in Discord webhook integration. It's designed to work in the web simulator via the browser's `fetch` API.
 
 **Key constraint**: On hardware without networking support, HTTP requests fail gracefully (handlers receive status 0 and empty body).
+
+**Primary use case**: Send game events, account creation requests, and notifications to Discord channels via webhooks.
 
 ## Architecture
 
@@ -15,10 +17,18 @@ This extension consists of a single TypeScript file (`main.ts`) that defines the
 
 ### API Design Pattern
 The extension follows a dual-interface pattern:
-- **Block/callback functions** (`get`, `post`): For use in MakeCode's visual block editor and simplified TypeScript
-- **Async functions** (`getAsync`, `postAsync`): For advanced Promise-based workflows
+- **Block/callback functions** (`get`, `post`, `discordSendMessage`, `discordSendEmbed`, `discordSendRequest`): For use in MakeCode's visual block editor and simplified TypeScript
+- **Async functions** (`getAsync`, `postAsync`, `discordSendMessageAsync`, etc.): For advanced Promise-based workflows
 
 All methods gracefully handle environments without `fetch` support by catching errors and returning status 0 with an empty body.
+
+### Discord Webhook Integration
+Three levels of Discord webhook functionality:
+1. **Simple messages** (`discordSendMessage`): Plain text messages
+2. **Rich embeds** (`discordSendEmbed`): Formatted messages with title, description, and color
+3. **Structured requests** (`discordSendRequest`): Pre-formatted embeds for account creation or similar requests with username, email, and request type fields
+
+All Discord functions return HTTP status codes (204 = success for Discord webhooks).
 
 ### MakeCode Block Annotations
 The code uses special JSDoc-style annotations for MakeCode integration:
