@@ -115,4 +115,131 @@ namespace http {
         return postAsync(webhookUrl, payload, "application/json")
             .then(r => r.status)
     }
+
+    /**
+     * Get data from a database/API with optional authentication key.
+     */
+    //% block="get data from %url|with key %apiKey then do %handler" handlerStatement=1 weight=45
+    //% apiKey.defl=""
+    //% expandableArgumentMode="toggle"
+    export function getData(url: string, apiKey: string, handler: (success: boolean, data: string) => void): void {
+        getDataAsync(url, apiKey)
+            .then(result => handler(result.success, result.data))
+            .catch(_ => handler(false, ""))
+    }
+
+    /**
+     * Async function to get data from a database/API.
+     */
+    export function getDataAsync(url: string, apiKey?: string): Promise<{ success: boolean, data: string }> {
+        const f = (globalThis as any).fetch
+        if (!f) return Promise.reject(new Error("HTTP not supported"))
+        
+        const headers: any = {}
+        if (apiKey && apiKey !== "") {
+            headers["Authorization"] = "Bearer " + apiKey
+            headers["X-API-Key"] = apiKey
+        }
+        
+        return f(url, { headers })
+            .then((res: any) => res.text().then((body: string) => ({
+                success: res.status >= 200 && res.status < 300,
+                data: body
+            })))
+    }
+
+    /**
+     * Set/save data to a database/API with optional authentication key.
+     */
+    //% block="save data to %url|value %data|with key %apiKey then do %handler" handlerStatement=1 weight=40
+    //% apiKey.defl=""
+    //% expandableArgumentMode="toggle"
+    export function saveData(url: string, data: string, apiKey: string, handler: (success: boolean, response: string) => void): void {
+        saveDataAsync(url, data, apiKey)
+            .then(result => handler(result.success, result.response))
+            .catch(_ => handler(false, ""))
+    }
+
+    /**
+     * Async function to save data to a database/API.
+     */
+    export function saveDataAsync(url: string, data: string, apiKey?: string): Promise<{ success: boolean, response: string }> {
+        const f = (globalThis as any).fetch
+        if (!f) return Promise.reject(new Error("HTTP not supported"))
+        
+        const headers: any = {
+            "Content-Type": "application/json"
+        }
+        if (apiKey && apiKey !== "") {
+            headers["Authorization"] = "Bearer " + apiKey
+            headers["X-API-Key"] = apiKey
+        }
+        
+        return f(url, { method: "POST", headers, body: data })
+            .then((res: any) => res.text().then((body: string) => ({
+                success: res.status >= 200 && res.status < 300,
+                response: body
+            })))
+    }
+
+    /**
+     * Get a specific variable/value from a database by key.
+     */
+    //% block="get variable %variableName from %url|with key %apiKey then do %handler" handlerStatement=1 weight=35
+    //% apiKey.defl=""
+    //% expandableArgumentMode="toggle"
+    export function getVariable(variableName: string, url: string, apiKey: string, handler: (success: boolean, value: string) => void): void {
+        getVariableAsync(variableName, url, apiKey)
+            .then(result => handler(result.success, result.value))
+            .catch(_ => handler(false, ""))
+    }
+
+    /**
+     * Async function to get a variable from a database.
+     */
+    export function getVariableAsync(variableName: string, url: string, apiKey?: string): Promise<{ success: boolean, value: string }> {
+        // Build URL with variable name as query parameter or path
+        const fullUrl = url.indexOf("?") >= 0 ? url + "&key=" + variableName : url + "?key=" + variableName
+        
+        return getDataAsync(fullUrl, apiKey)
+            .then(result => {
+                if (result.success) {
+                    try {
+                        // Try to parse as JSON and extract the variable
+                        const parsed = JSON.parse(result.data)
+                        const value = parsed[variableName] || parsed.value || result.data
+                        return { success: true, value: String(value) }
+                    } catch {
+                        // If not JSON, return raw data
+                        return { success: true, value: result.data }
+                    }
+                }
+                return { success: false, value: "" }
+            })
+    }
+
+    /**
+     * Set/save a specific variable to a database.
+     */
+    //% block="set variable %variableName to %value at %url|with key %apiKey then do %handler" handlerStatement=1 weight=30
+    //% apiKey.defl=""
+    //% expandableArgumentMode="toggle"
+    export function setVariable(variableName: string, value: string, url: string, apiKey: string, handler: (success: boolean) => void): void {
+        setVariableAsync(variableName, value, url, apiKey)
+            .then(success => handler(success))
+            .catch(_ => handler(false))
+    }
+
+    /**
+     * Async function to set a variable in a database.
+     */
+    export function setVariableAsync(variableName: string, value: string, url: string, apiKey?: string): Promise<boolean> {
+        const payload = JSON.stringify({
+            key: variableName,
+            value: value
+        })
+        
+        return saveDataAsync(url, payload, apiKey)
+            .then(result => result.success)
+    }
 }

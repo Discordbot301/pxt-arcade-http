@@ -17,6 +17,12 @@ Notes:
 - Discord webhook send embed (rich formatted message)
 - Discord webhook send request (for account creation requests, etc.)
 
+### Database/API Access
+- Get data from database (with optional API key)
+- Save data to database (with optional API key)
+- Get variable from database (retrieves specific value by name)
+- Set variable in database (saves specific value by name)
+
 ## Examples
 
 ### Basic HTTP GET
@@ -63,6 +69,48 @@ http.discordSendEmbed(
     3447003, // Blue color
     (status) => {
         game.splash("Notification sent!")
+    }
+)
+```
+
+### Get Variable from Database
+```ts
+http.getVariable(
+    "playerScore",
+    "https://api.example.com/data",
+    "your-api-key-here",  // Optional - leave empty "" if no key needed
+    (success, value) => {
+        if (success) {
+            game.splash("Score: " + value)
+        }
+    }
+)
+```
+
+### Save Variable to Database
+```ts
+http.setVariable(
+    "playerScore",
+    "1000",
+    "https://api.example.com/data",
+    "your-api-key-here",  // Optional - leave empty "" if no key needed
+    (success) => {
+        if (success) {
+            game.splash("Score saved!")
+        }
+    }
+)
+```
+
+### Get All Data from Database
+```ts
+http.getData(
+    "https://api.example.com/data",
+    "your-api-key-here",  // Optional - leave empty "" if no key needed
+    (success, data) => {
+        if (success) {
+            game.splash("Data: " + data)
+        }
     }
 )
 ```
