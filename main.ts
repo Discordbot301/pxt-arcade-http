@@ -104,14 +104,14 @@ namespace http {
     /**
      * Send a message to a webhook (Discord, Slack, etc).
      */
-    //% block="send webhook $url message $message" weight=80
-    export function sendWebhook(url: string, message: string): boolean {
+    //% block="Send webhook to $link With message $message" weight=80
+    export function sendWebhook(link: string, message: string): boolean {
         let success = false
         let done = false
         
         const payload = JSON.stringify({ content: message })
         
-        postAsync(url, payload, "application/json")
+        postAsync(link, payload, "application/json")
             .then(r => {
                 success = r.status >= 200 && r.status < 300
                 done = true
