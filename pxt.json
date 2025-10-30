@@ -1,6 +1,6 @@
 {
   "name": "arcade-http",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "HTTP GET and POST for MakeCode Arcade (simulator-supported)",
   "license": "MIT",
   "dependencies": {

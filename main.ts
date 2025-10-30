@@ -102,17 +102,19 @@ namespace http {
     }
 
     /**
-     * Send a message to a webhook (Discord, Slack, etc).
-     * This is a statement block (does not return a value).
+     * Send a message to a webhook (Discord, Slack, etc) and return the HTTP status as text (e.g., "204").
      */
-    //% block="Send webhook to $link with message $message" weight=80
-    export function sendWebhook(link: string, message: string): void {
+    //% block="Send webhook to $link With message $message" weight=80
+    //% blockSetVariable=status
+    export function sendWebhook(link: string, message: string): string {
+        let result = ""
         let done = false
         const payload = JSON.stringify({ content: message })
         postAsync(link, payload, "application/json")
-            .then(_ => { done = true })
-            .catch(_ => { done = true })
+            .then(r => { result = (r.status | 0).toString(); done = true })
+            .catch(_ => { result = ""; done = true })
         pauseUntil(() => done, 5000)
+        return result
     }
 
     /**
