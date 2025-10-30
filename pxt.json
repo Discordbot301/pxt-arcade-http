@@ -1,10 +1,10 @@
 {
   "name": "arcade-http",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "HTTP GET and POST for MakeCode Arcade (simulator-supported)",
   "license": "MIT",
   "dependencies": {
-    "arcade": "*"
+    "device": "*"
   },
   "supportedTargets": [
     "arcade"
@@ -13,5 +13,7 @@
     "main.ts",
     "README.md"
   ],
-  "testFiles": []
+  "testFiles": [],
+  "public": true,
+  "preferredEditor": "tsprj"
 }

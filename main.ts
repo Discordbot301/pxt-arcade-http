@@ -1,4 +1,4 @@
-//% color=#0f6ad8 icon="\uf0e0"
+//% color=#0f6ad8 icon="\uf0e0" weight=100
 namespace http {
     /**
      * Perform an HTTP GET and run a handler when it completes.
