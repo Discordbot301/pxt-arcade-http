@@ -1,10 +1,13 @@
 //% color=#0f6ad8 icon="\uf0e0" weight=100
+// Allow referencing the browser fetch in simulator without TS lib errors
+declare const fetch: any
+
 namespace http {
     /**
      * Async GET returning status and body.
      */
     export function getDataAsync(url: string, apiKey?: string): Promise<{ success: boolean, data: string }> {
-        const f = (globalThis as any).fetch
+        const f = (fetch as any)
         if (!f) return Promise.reject(new Error("HTTP not supported"))
         
         const headers: any = {}
@@ -24,7 +27,7 @@ namespace http {
      * Async POST returning status and response body.
      */
     export function postAsync(url: string, body: string, contentType?: string): Promise<{ status: number, body: string }> {
-        const f = (globalThis as any).fetch
+        const f = (fetch as any)
         if (!f) return Promise.reject(new Error("HTTP not supported"))
         const headers: any = {}
         if (contentType) headers["Content-Type"] = contentType
@@ -36,7 +39,7 @@ namespace http {
      * Async function to save data to a database/API.
      */
     export function saveDataAsync(url: string, data: string, apiKey?: string): Promise<{ success: boolean, response: string }> {
-        const f = (globalThis as any).fetch
+        const f = (fetch as any)
         if (!f) return Promise.reject(new Error("HTTP not supported"))
         
         const headers: any = {
