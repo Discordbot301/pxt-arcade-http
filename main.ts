@@ -6,7 +6,7 @@ namespace http {
     /**
      * Async GET returning status and body.
      */
-    export function getDataAsync(url: string, apiKey?: string): Promise<{ success: boolean, data: string }> {
+    export function getDataAsync(url: string, apiKey?: string): Promise<any> {
         const f = (fetch as any)
         if (!f) return Promise.reject(new Error("HTTP not supported"))
         
@@ -26,7 +26,7 @@ namespace http {
     /**
      * Async POST returning status and response body.
      */
-    export function postAsync(url: string, body: string, contentType?: string): Promise<{ status: number, body: string }> {
+    export function postAsync(url: string, body: string, contentType?: string): Promise<any> {
         const f = (fetch as any)
         if (!f) return Promise.reject(new Error("HTTP not supported"))
         const headers: any = {}
@@ -38,7 +38,7 @@ namespace http {
     /**
      * Async function to save data to a database/API.
      */
-    export function saveDataAsync(url: string, data: string, apiKey?: string): Promise<{ success: boolean, response: string }> {
+    export function saveDataAsync(url: string, data: string, apiKey?: string): Promise<any> {
         const f = (fetch as any)
         if (!f) return Promise.reject(new Error("HTTP not supported"))
         
